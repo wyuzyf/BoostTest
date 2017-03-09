@@ -66,6 +66,7 @@ int main(){
 //这个程序是按照书上来的，但是最后没有输出（就是什么都没有）
 //按我理解的意思是 在程序退出的时候，执行析构函数，然后执行Try块
 //输出cout的内容，但结果却和我理解的不一样
+/*
 #include <boost/progress.hpp>
 #include <boost/static_assert.hpp>
 #include <iostream>
@@ -117,3 +118,68 @@ int main(){
 	//cout << "now time elapsed:" << t.elapsed() << "s" << endl;
 	system("pause");
 }
+*/
+
+//(4)progress_display 显示程序执行的进度
+//我改v的大小，pos,pded自加自减，输出都不变（第一版）
+//（第二版），报告字符串的行号,显示结果还是和想象的不一样，这应该是自带的BUG
+#include <iostream>
+#include <filesystem>    //不加这个头文件的时候，ofstream fs这句有错误
+#include <boost/progress.hpp>
+#include <vector>
+
+using namespace std;
+using namespace boost;
+/*
+int main()
+{
+	vector<string> v(10);   //声明一个字符串向量的对象
+	ofstream fs("c:\\test.txt");         //文件输出流
+
+	//声明一个progress_display对象，基数是v的大小
+	progress_display pd(v.size());
+
+	//开始迭代遍历向量，处理字符串，写入文件
+	vector<string>::iterator pos;
+	for (pos = v.begin(); pos != v.end(); pos++)
+	{
+		fs << *pos << endl;
+		pd++;   //更新进度显示
+	}
+
+	system("pause");
+}
+*/
+
+int main()
+{
+	vector<string> v(100,"aaa");      
+
+	v[10] = "";
+	v[23] = "";
+
+	ofstream fs("c:\\test.txt");
+	progress_display pd(v.size());
+
+	vector<string>::iterator pos;
+	for (pos = v.begin(); pos != v.end(); ++pos)
+	{
+		fs << *pos << endl;
+		++pd;   //更新进度显示
+		
+		if (pos->empty())
+		{
+			cout << "null string #" << (pos - v.begin()) << endl;
+		}
+	}
+
+	system("pause");
+}
+
+
+
+
+
+
+
+
